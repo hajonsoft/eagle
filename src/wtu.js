@@ -272,7 +272,6 @@ async function pageContentHandler(currentConfig) {
 }
 
 async function sendPassenger(passenger) {
-  util.infoMessage(page, `sending ${passenger?.slug}`);
   status = "sending";
   await page.emulateVisionDeficiency("none");
   // await page.emulateVisionDeficiency("blurredVision");
@@ -294,7 +293,7 @@ async function sendPassenger(passenger) {
   if (!groupName) {
     groupName = budgie.get("wtu_group");
   }
-  util.infoMessage(page, `Group name 👨‍👩‍👦 ${groupName}`);
+  util.infoMessage(page, `Group 👨‍👩‍👦 ${groupName}: Attention!!! Embassy is defaulte to first option`);
   await page.select("#ddlgroupname", groupName);
   await page.waitForTimeout(3000);
   await page.waitForSelector("#btnppscan");
