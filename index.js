@@ -97,7 +97,7 @@ async function sendToCloud(data) {
   });
 
 
-  console.log("Status: https://github.com/hajonsoft/hajonsoft-eagle/actions");
+  console.log("https://github.com/hajonsoft/hajonsoft-eagle/actions/workflows/submit.yml");
 }
 
 async function submitToProvider() {
