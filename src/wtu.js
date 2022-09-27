@@ -112,7 +112,10 @@ const config = [
       },
       {
         selector: "#ddlppissmm",
-        txt: (row) => row.passIssueDt.mmm.startsWith("0") ? row.passIssueDt.mmm.substring(1) : row.passIssueDt.mmm,
+        txt: (row) =>
+          row.passIssueDt.mmm.startsWith("0")
+            ? row.passIssueDt.mmm.substring(1)
+            : row.passIssueDt.mmm,
       },
       {
         selector: "#txtppissyy",
@@ -239,7 +242,7 @@ async function pageContentHandler(currentConfig) {
       );
       break;
     case "create-mutamer":
-      await util.toggleBlur(page,false);
+      await util.toggleBlur(page, false);
       await util.controller(page, currentConfig, data.travellers);
       if (fs.existsSync(getPath("loop.txt"))) {
         return sendPassenger(passenger);
@@ -261,9 +264,31 @@ async function pageContentHandler(currentConfig) {
   }
 }
 
+async function detectGroupId() {
+  const groupSelector = "#ddlgroupname";
+  const optionsGroups = await page.$eval(groupSelector, (e) => e.innerHTML);
+  const suggestedGroupName = util.suggestGroupName(data);
+  // Strip off timestamp
+  const groupName = suggestedGroupName.replace(/^\d+_/, "");
+  const optionRegex = new RegExp(
+    `value="(\\d+)">\\d+ - (\\d+_)?${groupName} \\|(.*)<\/option>`,
+    "im"
+  );
+  const foundGroup = optionRegex.exec(optionsGroups.replace(/\n/gim, ""));
+  console.log({ foundGroup, optionsGroups, groupName });
+  if (foundGroup && foundGroup.length >= 2) {
+    await page.select(groupSelector, foundGroup[1]);
+  }
+}
+
 async function sendPassenger(passenger) {
+  // Detect group id
+  if (!global.submission.targetGroupId) {
+    await detectGroupId();
+    await page.waitForTimeout(600000);
+  }
   status = "sending";
-  await util.toggleBlur(page,false);
+  await util.toggleBlur(page, false);
   // await util.toggleBlur(page);
   const titleMessage = `🧟 ${parseInt(util.getSelectedTraveler()) + 1}/${
     data.travellers.length
@@ -311,7 +336,7 @@ async function sendPassenger(passenger) {
   await page.type("#divshowmsg", passenger.codeline, {
     delay: 0,
   });
-  await util.toggleBlur(page,false);
+  await util.toggleBlur(page, false);
 
   await page.waitForTimeout(5000);
   await util.commit(
