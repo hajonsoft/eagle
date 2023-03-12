@@ -349,11 +349,11 @@ async function pageContentHandler(currentConfig) {
     //     '#body > div > div > section > div > div.content--box--detail > div > div.login-alt > div:nth-child(2) > div > button'
     //   );
     //   break;
-    case 'result_print_renewal':
+    case "result_print_renewal":
       // await util.commit(page, currentConfig.details, passenger);
-      await page.focus('#basvuruNo');
-      await page.click('#basvuruNo');
-      await page.type('#basvuruNo', '3213-21-3123123', { delay: 100 });
+      await page.focus("#basvuruNo");
+      await page.click("#basvuruNo");
+      await page.type("#basvuruNo", "3213-21-3123123", { delay: 100 });
 
       // const token = await util.commitCaptchaTokenWithSelector(
       //   page,
