@@ -176,13 +176,9 @@ async function listNusukMessages(auth, recipient, subject) {
         id: message.id,
       });
       try {
-        gmail.users.messages.modify({
+        gmail.users.messages.delete({
           userId: "me",
           id: message.id,
-          resource: {
-            addLabelIds: [],
-            removeLabelIds: ["UNREAD"],
-          },
         });
       } catch (e) {
         console.log(e);
