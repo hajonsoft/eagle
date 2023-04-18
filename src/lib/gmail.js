@@ -24,7 +24,7 @@ const { google } = require("googleapis");
 const moment = require("moment");
 
 // If modifying these scopes, delete token.json.
-const SCOPES = ["https://www.googleapis.com/auth/gmail.readonly"];
+const SCOPES = ["https://www.googleapis.com/auth/gmail.modify"];
 // The file token.json stores the user's access and refresh tokens, and is
 // created automatically when the authorization flow completes for the first
 // time.
@@ -175,18 +175,18 @@ async function listNusukMessages(auth, recipient, subject) {
         userId: "me",
         id: message.id,
       });
-      // try {
-      //   const modify_request = {
-      //     removeLabelIds: ["UNREAD"],
-      //   };
-      //   await gmail
-      //     .users()
-      //     .messages()
-      //     .modify((userId = "me"), (id = message.id), (body = modify_request))
-      //     .execute();
-      // } catch (e) {
-      //   console.log(e);
-      // }
+      try {
+        gmail.users.messages.modify({
+          userId: "me",
+          id: message.id,
+          resource: {
+            addLabelIds: [],
+            removeLabelIds: ["UNREAD"],
+          },
+        });
+      } catch (e) {
+        console.log(e);
+      }
       const messageDate = moment(
         contents.data.payload.headers.find((h) => h.name === "Date").value
       );

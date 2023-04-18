@@ -613,7 +613,8 @@ async function controller(page, structure, travellers) {
 }
 
 function registerLoop() {
-  fs.writeFileSync(getPath("loop.txt"), "", "utf8");
+  fs.writeFileSync(getPath("loop.txt"), "loop", "utf8");
+  console.log("loop.txt created");
 }
 function unregisterLoop() {
   if (fs.existsSync(getPath("loop.txt"))) {
@@ -659,13 +660,16 @@ async function commander(page, structure, travellers) {
         const container = document.querySelector(controller.selector);
         const handleMethodName = params[1];
         const htmlContent = params[3]
-          .replace(/{direction}/, controller.leftAlign ? "direction: rtl;" : "")
-          .replace(
-            /{structureParam+controller_name}/,
+          .replaceAll(
+            /{direction}/g,
+            controller.leftAlign ? "direction: rtl;" : ""
+          )
+          .replaceAll(
+            /{structureParam+controller_name}/g,
             params[0].controller.name
           )
-          .replace(/{handleMethodName}/, handleMethodName)
-          .replace(
+          .replaceAll(/{handleMethodName}/g, handleMethodName)
+          .replaceAll(
             /{title}/g,
             structureParam.controller.title +
               " " +

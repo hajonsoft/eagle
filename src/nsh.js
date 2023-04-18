@@ -137,6 +137,10 @@ async function pageContentHandler(currentConfig) {
         manualMode = currentConfig.name;
       }
       await util.controller(page, currentConfig, data.travellers);
+      if (fs.existsSync(getPath("loop.txt"))) {
+        await registerPassenger(util.getSelectedTraveler());
+        return;
+      }
       await util.commander(page, {
         controller: {
           selector:
@@ -380,9 +384,9 @@ async function registerPassenger(selectedTraveler) {
 
   const code = await gmail.getNusukCodeByEmail(
     emailAddress,
-    "Email Activation"
+    `("Email Activation" OR "تفعيل البريد الإلكتروني")`
   );
-
+// to:roheenzebrtb319@premiumemail.ca from:no_reply@hajj.nusuk.sa is:unread subject:("Email Activation" OR "تفعيل البريد الإلكتروني") newer_than:1d
   await util.commit(
     page,
     [
