@@ -1,0 +1,1 @@
+function isEnglishOnly(){return process['argv']['some'](_0x1e2cfc=>_0x1e2cfc['toLowerCase']()==='--lang=en');}module['exports']={'isEnglishOnly':isEnglishOnly};

@@ -1,0 +1,1 @@
+function canAutoAdvance(){return Boolean(global['headless']||global['visualHeadless']);}module['exports']={'canAutoAdvance':canAutoAdvance};

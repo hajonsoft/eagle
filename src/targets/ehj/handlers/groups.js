@@ -1,0 +1,1 @@
+const {SELECTORS}=require('../selectors');async function handler({page:_0x3a0636}){await _0x3a0636['waitForSelector'](SELECTORS['groupList']['newGroupButton']),await _0x3a0636['click'](SELECTORS['groupList']['newGroupButton']);}module['exports']={'handler':handler};

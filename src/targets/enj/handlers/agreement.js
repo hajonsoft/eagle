@@ -1,0 +1,1 @@
+const {SELECTORS}=require('../selectors');async function handler({currentPage:_0x2413fc}){if(!_0x2413fc)return;await _0x2413fc['waitForSelector'](SELECTORS['agreement']['continue']),await _0x2413fc['click'](SELECTORS['agreement']['continue']);}module['exports']={'handler':handler};

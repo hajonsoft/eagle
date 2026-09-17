@@ -1,0 +1,1 @@
+const {defaultDomain}=require('../knowledge');async function handler({page:_0x4e97a9}){await _0x4e97a9['goto'](defaultDomain+'/protected/applicants-groups/applicants/list',{'waitUntil':'domcontentloaded'});}module['exports']={'handler':handler};

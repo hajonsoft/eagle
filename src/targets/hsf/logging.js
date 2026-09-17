@@ -1,0 +1,1 @@
+const {logMessage}=require('../common/log-message');function logHsfMessage({icon:_0x46319b,english:_0x40e66e,arabic:_0x18d546,depth:depth=0x0}){logMessage({'icon':_0x46319b,'english':'[HajonSoft\x20HSF]\x20'+_0x40e66e,'arabic':'[حج\x20أونسوفت]\x20'+_0x18d546,'depth':depth});}module['exports']={'logHsfMessage':logHsfMessage};

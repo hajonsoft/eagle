@@ -1,0 +1,1 @@
+const {clickWhenReady}=require('./common/clickWhenReady'),{SELECTORS}=require('../selectors');async function handler({page:_0x246feb,setStatus:_0xdff7c2}){_0xdff7c2('insurance'),await clickWhenReady(_0x246feb,SELECTORS['insurance']['checkbox']),await clickWhenReady(_0x246feb,SELECTORS['insurance']['nextButton']);}module['exports']={'handler':handler};
