@@ -15,6 +15,7 @@ const config = {
   storageBucket: process.env.VITE_FIREBASE_STORAGEBUCKET,
   messagingSenderId: process.env.VITE_FIREBASE_MESSAGINGSENDERID,
   appId: process.env.VITE_FIREBASE_APPID,
+  measurementId: process.env.VITE_FIREBASE_MEASUREMENTID,
   functionURL: process.env.VITE_FIREBASE_FUNCTIONSURL,
 };
 

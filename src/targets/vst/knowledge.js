@@ -116,7 +116,7 @@ const config = [
       { selector: SELECTORS.passport.passportIssuePlace, value: (row) => row.placeOfIssue },
       {
         selector: SELECTORS.passport.placeOfResidence,
-        value: () => "",
+        value: (row) => row?.extraData?.ksaResidence?.nameOfPerson,
         autocomplete: "PlaceOfResidence",
         defaultValue: "Mohamed Mohamed",
       },

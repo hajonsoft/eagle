@@ -1,179 +1,272 @@
-# 🦅 Eagle
+# Hajonsoft Eagle
 
-We control chrome using eagle. Eagle is built on top of puppeteer and can send data to any website.
+## English
 
-# Getting started 
+### What is Eagle?
 
-Note: for Apple M1 Chip choose ["open with rosetta"](https://www.courier.com/blog/tips-and-tricks-to-setup-your-apple-m1-for-development) when configuring your terminal in order to successfully install packages.
+Hajonsoft Eagle is a powerful automation tool for teams that process passports,
+traveler documents, and applications. It reads your document data and submits it
+to external systems, helping your team complete repetitive work faster and with
+fewer data-entry errors.
 
-Once packages are installed via rosetta, you can use `node .` from a regular terminal without a problem.
+Eagle runs directly on your computer, giving your team a fast and practical
+workspace for daily operations. Owl uses the same engine on Hajonsoft-managed
+cloud machines, while Eagle gives you the convenience and control of running
+the workflow locally.
 
-You may need to install [chromium via brew](https://linguinecode.com/post/how-to-fix-m1-mac-puppeteer-chromium-arm64-bug).
+### Why is it called Eagle?
 
+The eagle is a bird of prey known for its power, speed, and keen eyesight. The
+name reflects what Eagle brings to your operation: clear document recognition,
+fast execution, and the strength to handle demanding workloads.
 
+### How Eagle helps your business
+
+- **Faster document processing:** Send complete document packages in one action
+	instead of searching for and uploading each file separately.
+- **One-click resubmission:** Correct and resubmit an application quickly when a
+	destination system requests it.
+- **Less manual entry:** Reuse captured information for applications and printed
+	documents, while retaining important values such as MOFA numbers.
+- **Smarter document capture:** Use document recognition to capture passport
+	details, including issue dates, without relying on an expensive 3M scanner.
+- **Early validation:** Identify expired passports, duplicate records, and other
+	issues before they slow down the application process.
+- **Better workflow continuity:** Reduce the risk of losing progress because of
+	destination-system timeouts.
+- **Flexible passport handling:** Help resolve MRZ and parsing limitations,
+	including cases involving issuing-authority details or nationality recognition.
+- **Faster Hajj workflows:** Import MOFA numbers and automate Hajj smart-form
+	data entry.
+- **A stronger support platform:** Give Hajonsoft support teams a consistent,
+	scalable workflow for assisting clients and processing large volumes of
+	passports.
+- **Secure access:** Support passwordless login and two-factor authentication.
+- **Less friction:** Reduce repetitive captcha-related steps where supported by
+	the connected system.
+
+### Installation
+
+Before installing Eagle, install the latest versions of **Node.js** and **Git**.
+
+1. Download Node.js from [nodejs.org](https://nodejs.org/) and choose the latest
+	 LTS version. After installation, open Terminal (macOS/Linux) or PowerShell
+	 (Windows) and confirm it is available:
+
+	 ```bash
+	 node --version
+	 npm --version
+	 ```
+
+2. Download Git from [git-scm.com/downloads](https://git-scm.com/downloads)
+	 and follow the installer. Confirm it is available in Terminal or PowerShell:
+
+	 ```bash
+	 git --version
+	 ```
+
+3. Clone Eagle from GitHub, move into its folder, and install its dependencies:
+
+	 ```bash
+	 git clone https://github.com/hajonsoft/eagle.git
+	 cd eagle
+	 npm i
+	 ```
+
+### Updating Eagle
+
+When a new version is available, open Terminal or PowerShell inside the Eagle
+folder and run:
+
+```bash
+git pull origin main
 ```
-git clone https://github.com/hajonsoft/hajonsoft-eagle.git
-cd hajonsoft-eagle
+
+This downloads the latest changes while preserving local changes whenever Git
+can merge them. To make your local copy exactly match the latest `main` branch,
+run:
+
+```bash
+git fetch origin
+git reset --hard origin/main
+```
+
+The reset command removes local changes to tracked files. After either update
+method, install any updated dependencies:
+
+```bash
 npm i
-node . [file=FILENAME[.zip]] [noimage] [WORKFLOWNAME-only] [verbose-url=[url]] [slow]
+```
+## العربية
 
+### ما هو النسر؟
+
+Hajonsoft النسر هو أداة أتمتة قوية للفرق التي تعالج جوازات السفر ووثائق
+المسافرين والطلبات. يقرأ بيانات المستندات ويرسلها إلى الأنظمة الخارجية، مما
+يساعد فريقك على إنجاز الأعمال المتكررة بسرعة أكبر وبأخطاء أقل في إدخال البيانات.
+
+يعمل النسر مباشرة على جهاز الكمبيوتر الخاص بك، ليمنح فريقك بيئة عملية وسريعة
+للعمليات اليومية. أما Owl فيستخدم المحرك نفسه على أجهزة سحابية تديرها
+Hajonsoft، بينما يمنحك النسر مرونة وتحكماً أكبر من خلال التشغيل المحلي.
+
+### لماذا سُمّي النسر؟
+
+النسر طائر جارح معروف بقوته وسرعته وقوة بصره. ويعكس الاسم ما يقدمه النسر
+لعملياتك: قراءة واضحة للمستندات، وتنفيذ سريع، وقدرة على التعامل مع أحجام العمل
+الكبيرة.
+
+### فوائد النسر لعملك
+
+- معالجة أسرع للمستندات وإرسال حزمة المستندات كاملة في خطوة واحدة.
+- إعادة إرسال الطلبات بنقرة واحدة بدلاً من تكرار جميع الخطوات.
+- إعادة استخدام البيانات التي تم التقاطها في الطلبات والمستندات المطبوعة.
+- التقاط بيانات مهمة مثل أرقام MOFA وتفاصيل جواز السفر وتاريخ الإصدار.
+- التحقق المبكر من الجوازات المنتهية والسجلات المكررة والمشكلات المحتملة.
+- تقليل خطر فقدان التقدم بسبب انتهاء مهلة النظام الخارجي.
+- المساعدة في معالجة قيود MRZ ومشكلات قراءة الجنسية أو بيانات جهة الإصدار.
+- استيراد أرقام MOFA وأتمتة إدخال بيانات نموذج الحج الذكي.
+- دعم تسجيل الدخول دون كلمة مرور والمصادقة الثنائية.
+- تقليل الخطوات المتكررة المرتبطة بـ captcha حيثما يدعم النظام المتصل ذلك.
+
+### التثبيت
+
+قبل تثبيت النسر، ثبّت أحدث إصدار من **Node.js** و **Git**.
+
+1. نزّل Node.js من [nodejs.org](https://nodejs.org/) واختر أحدث إصدار LTS.
+	 بعد التثبيت افتح Terminal على macOS/Linux أو PowerShell على Windows وتحقق
+	 من التثبيت:
+
+	 ```bash
+	 node --version
+	 npm --version
+	 ```
+
+2. نزّل Git من [git-scm.com/downloads](https://git-scm.com/downloads) واتبع
+	 خطوات التثبيت. ثم تحقق من التثبيت:
+
+	 ```bash
+	 git --version
+	 ```
+
+3. انسخ النسر من GitHub، وانتقل إلى مجلده، وثبّت الاعتماديات:
+
+	 ```bash
+	 git clone https://github.com/hajonsoft/eagle.git
+	 cd eagle
+	 npm i
+	 ```
+
+### تحديث النسر
+
+عند توفر إصدار جديد، افتح Terminal أو PowerShell داخل مجلد النسر وشغّل:
+
+```bash
+git pull origin main
 ```
 
-Note: Eagle will use data.json from its root, WORKFLOWNAME values (login, main, create-group, create-mutamer)
+ولجعل النسخة المحلية مطابقة تماماً لأحدث نسخة من فرع `main`، شغّل:
 
-# Verbose mode
-
-node . verbose
-
-Enable extraction of DOM elements every few seconds to a log file as they appear
-
-node . verbose-url="https://www.etawaf.com/tawaf43/index.html?locale=en"
-
-Extract DOM elements for one page only and only one time no intervals
-
-# Puppeteer
-
-Use node and [puppeteer](https://github.com/puppeteer/puppeteer/tree/main#readme) to automate passenger data exchange with third party sites like
-
-* Way to Umrah
-* Bab Al Umrah
-* Gabul Ya Hajj
-* Tawaf
-* Ehaj
-* Visit Saudi
-* other local visa systems
-
-Puppeteer should easily be installed using `npm i puppeteer` check package.json for the version we use. If it is 5.5.0 then this uses chromium version 818858 (go using 997535). If 14.0.0no then r991974
-
-Some machines refuse to install puppeteer and chromium and one way of overcoming this install error is by installing manually from [here](https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html).
-
-For example on M1 machine you can download [here](https://commondatastorage.googleapis.com/chromium-browser-snapshots/index.html?prefix=Mac/818858/) directly (it's an Intel build, but runs fine via Rosetta 2 on M1 – get chrome-mac.zip). Also notice the revision for chromium in the url. Read this [article](https://linguinecode.com/post/how-to-fix-m1-mac-puppeteer-chromium-arm64-bug) for more info.
-
-```
-Open a rosetta terminal => This is just a regular terminal (with use rosetta checked in settings)
-brew install chromium
-go to Applications, try to open chromium, if you get warning, try to right click open
-which chromium
-  `will print the path. Mine is /opt/homebrew/bin/chromium`
-open your shell config mine is => ~/.zshrc
-export PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
-export PUPPETEER_EXECUTABLE_PATH=`which chromium`
+```bash
+git fetch origin
+git reset --hard origin/main
 ```
 
-Make sure which chromium points to the correct path and that you can open it free of warnings, try right click open if you get warnings.
+يحذف أمر reset التغييرات المحلية في الملفات المتتبعة. بعد التحديث، ثبّت أي
+اعتماديات جديدة:
 
-
-To start a recorder (not helpful)
-
-```
-npx @puppeteer/recorder [url]
-
-npx @puppeteer/recorder https://www.waytoumrah.com/prj_umrah/eng/eng_frmlogin.aspx
-npx @puppeteer/recorder https://eumra.com/
-npx @puppeteer/recorder https://www.etawaf.com/tawaf43/index.html?locale=en
+```bash
+npm i
 ```
 
-To send a photo
+## Français
 
-I used this site for testing
-https://anonfiles.com/
+### Qu'est-ce qu'Eagle ?
 
-a better approach to uploading file is https://www.codegrepper.com/code-examples/javascript/upload+file+from+local+puppeteer
+Hajonsoft Eagle est un puissant outil d'automatisation pour les équipes qui
+traitent les passeports, les documents des voyageurs et les demandes. Il lit les
+données de vos documents et les transmet aux systèmes externes, afin d'accélérer
+les tâches répétitives et de réduire les erreurs de saisie.
 
-Basically 
-await input.uploadFile(`${pathFile}/travis_1.png`)
-instead of fileChooser below
+Eagle fonctionne directement sur votre ordinateur pour offrir à votre équipe un
+environnement rapide et pratique au quotidien. Owl utilise le même moteur sur
+des machines cloud gérées par Hajonsoft, tandis qu'Eagle vous donne la maîtrise
+et la souplesse d'un fonctionnement local.
 
+### Pourquoi le nom Eagle ?
+
+L'aigle est un rapace reconnu pour sa puissance, sa vitesse et sa vue perçante.
+Ce nom représente les avantages d'Eagle : une lecture précise des documents,
+une exécution rapide et la capacité de gérer des volumes importants.
+
+### Les avantages d'Eagle pour votre activité
+
+- Traiter les documents plus rapidement et envoyer un dossier complet en une
+	seule action.
+- Réenvoyer une demande en un clic au lieu de répéter toutes les étapes.
+- Réutiliser les données capturées pour les demandes et les documents imprimés.
+- Capturer les informations importantes, comme les numéros MOFA et la date de
+	délivrance, grâce à la reconnaissance des documents.
+- Détecter en amont les passeports expirés, les doublons et les problèmes
+	potentiels.
+- Réduire le risque de perdre votre progression à cause d'un délai d'expiration
+	du système externe.
+- Aider à traiter les limites du MRZ et les problèmes de lecture de nationalité
+	ou d'autorité émettrice.
+- Importer les numéros MOFA et automatiser la saisie du formulaire Hajj Smart.
+- Prendre en charge la connexion sans mot de passe et l'authentification à deux
+	facteurs.
+- Réduire les étapes répétitives liées aux captchas lorsque le système connecté
+	le permet.
+
+### Installation
+
+Avant d'installer Eagle, installez les dernières versions de **Node.js** et de
+**Git**.
+
+1. Téléchargez Node.js depuis [nodejs.org](https://nodejs.org/) et choisissez la
+	 dernière version LTS. Après l'installation, ouvrez Terminal sur macOS/Linux
+	 ou PowerShell sur Windows et vérifiez l'installation :
+
+	 ```bash
+	 node --version
+	 npm --version
+	 ```
+
+2. Téléchargez Git depuis [git-scm.com/downloads](https://git-scm.com/downloads)
+	 et suivez l'installateur. Vérifiez ensuite l'installation :
+
+	 ```bash
+	 git --version
+	 ```
+
+3. Clonez Eagle depuis GitHub, ouvrez son dossier et installez ses dépendances :
+
+	 ```bash
+	 git clone https://github.com/hajonsoft/eagle.git
+	 cd eagle
+	 npm i
+	 ```
+
+### Mettre Eagle à jour
+
+Lorsqu'une nouvelle version est disponible, ouvrez Terminal ou PowerShell dans
+le dossier Eagle et exécutez :
+
+```bash
+git pull origin main
 ```
-      // 1. Create pointer for fileChooser
-      let futureFileChooser = page.waitForFileChooser();
 
-      // 2. Browse to select image
-        await page.evaluate(() =>
-        document
-          .querySelector("#ctl00_ContentHolder_ImageUploaderControl")
-          .click()
-      );
-      // 3. Wait for the file chooser
-      let fileChooser = await futureFileChooser;
+Pour rendre votre copie locale exactement identique à la dernière version de la
+branche `main`, exécutez :
 
-      // 4. Perform anything while file chooser is opened
-      const resizedPhotoPath = path.join(
-        util.photosFolder,
-        `${data.travellers[counter].passportNumber}_200x200.jpg`
-      );
-      await sharp(photoPath, {
-              fit: sharp.fit.inside,
-              withoutEnlargement: true,
-            }).resize(200, 200).toFile(resizedPhotoPath);
-
-      // 5. Accept the image into the file chooser
-      await fileChooser.accept([resizedPhotoPath]);
+```bash
+git fetch origin
+git reset --hard origin/main
 ```
 
-## user message
-Since we communicate with advanced eagle users in these messages, we color console.log messages 
+La commande reset supprime les modifications locales des fichiers suivis. Après
+la mise à jour, installez les dépendances éventuellement modifiées :
 
-`console.log('\x1b[7m', "message","\x1b[0m");`
-
-If you use ansi color your must reset using "\x1b[0m"
-Here is the reference for [ansi colors](https://telepathy.freedesktop.org/doc/telepathy-glib/telepathy-glib-debug-ansi.html#TP-ANSI-RESET:CAPS) 
-
-## Budgie
-
-node . budgie
-_List all budgie entries_
-
-node . budgie [key:value] [key:value]
-node . budgie PlaceOfResidence:"New place of birth"
-_Set PlaceOfResidence to new value_
-
-## SMS
-We use third party provider for SMS, you must have an api_key to purchase sms tokens. HAJonSoft gladly shares api_key, but feel free to override with your own api_key with, contact us for details. 
-https://sms-activate.org/en/getNumber
-
-alialiayman@gmail.com/ Paris until 4
-
-https://www.receivesms.co/
-https://receive-smss.com/
-https://smsreceivefree.com/
-
-## Vision Api
-
-To use vision api, enable billing in [console.googlcloud.com](https://console.cloud.google.com/), search for Vision api, enable it, create service account in credentials, then download a json in to ./scan/auth/key.json and you are good to image to text with google latest ML 
-
-## Benefits of Eagle
-
-1- Quick atomic send (no looking for photos, vaccine file or residence permit)
-2- Resubmit in one click with eagle vs all clicks without
-3- Reuse the same data to print artifacts
-4- capture important data as they appear on screen like mofa number
-5- Platform for support. We can't support outside HAJonSoft. We can send thousands of passports quickly.
-6- Reduce risk of Ehaj timeout
-7- With google vision, You don't need expensive 3M scanner. We read issue date too.
-8- Early validation/alert about expired passports or duplicate
-9- MRZ Manipulation to fix Ehaj limitations ex. German passport
-10- Photo capture and resize is actually a challenging time consuming task.
-11- Import mofa number, automate hajj smart form
-12- Can fix issuing authority mistake on passports issued with wrong MRZ or unrecognized nationality ex. Zimbabway or cambodian messed up MRZ. even solve 
-Ehaj parsing issues too
-13- passwordless login with two factor authentication
-14- Captcha elimination
-
-
-## References
-css escape characters. Sometimes an external visa system uses special character in the selector like . or : (\3A)
-
-CSS represents escaped characters in a different way. Escapes start with a backslash followed by the hexadecimal number that represents the character's hexadecimal Unicode code point value.
-
-https://www.w3.org/International/questions/qa-escapes#:~:text=CSS%20represents%20escaped%20characters%20in,that%20is%20all%20you%20need.
-
-Gmail 
-https://developers.google.com/gmail/api/quickstart/nodejs
-
-Captcha
-https://2captcha.com/enterpage
-
-Release process
-https://youtu.be/IdHik3GxV0Q
-
+```bash
+npm i
+```

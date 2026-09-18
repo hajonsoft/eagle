@@ -1,1 +1,1 @@
-const {SELECTORS}=require('../selectors');async function handler({page:_0x4dcf76}){await _0x4dcf76['waitForSelector'](SELECTORS['groupList']['newGroupButton']),await _0x4dcf76['click'](SELECTORS['groupList']['newGroupButton']);}module['exports']={'handler':handler};
+const {SELECTORS}=require('../selectors');async function handler({page:_0x305a68}){await _0x305a68['waitForSelector'](SELECTORS['groupList']['newGroupButton']),await _0x305a68['click'](SELECTORS['groupList']['newGroupButton']);}module['exports']={'handler':handler};
