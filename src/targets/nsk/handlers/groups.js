@@ -1,1 +1,1 @@
-async function handler({page:_0x80f031,defaultDomain:_0xdca891}){await _0x80f031['goto'](_0xdca891+'/umrah/mutamer/mutamer-list');}module['exports']={'handler':handler};
+async function handler({page:_0x269800,defaultDomain:_0x159f6a}){await _0x269800['goto'](_0x159f6a+'/umrah/mutamer/mutamer-list');}module['exports']={'handler':handler};

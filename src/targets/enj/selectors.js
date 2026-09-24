@@ -22,6 +22,7 @@ const SELECTORS = {
     continue: "#content > div > div.page-content-inner > div.row > div > div > div.portlet-body.form > div > div.form-actions.fluid.right > div > div > a.btn.green",
   },
   visaInfoLogin: {
+    embassy: "#Embassy",
     captchaImage: "#imgCaptcha",
     captchaInput: "#Captcha",
     processingStatus:

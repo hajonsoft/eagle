@@ -1,1 +1,1 @@
-const {loginUrl}=require('../knowledge');async function handler({page:_0x4d6ff5}){await _0x4d6ff5['goto'](loginUrl,{'waitUntil':'domcontentloaded'});}module['exports']={'handler':handler};
+const {loginUrl}=require('../knowledge');async function handler({page:_0x23eed4}){await _0x23eed4['goto'](loginUrl,{'waitUntil':'domcontentloaded'});}module['exports']={'handler':handler};

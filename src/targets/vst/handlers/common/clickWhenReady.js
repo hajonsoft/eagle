@@ -1,1 +1,1 @@
-async function clickWhenReady(_0x122fe6,_0x100007,_0x500d82){await _0x122fe6['waitForSelector'](_0x100007,_0x500d82),await _0x122fe6['click'](_0x100007);}module['exports']={'clickWhenReady':clickWhenReady};
+async function clickWhenReady(_0x4a0934,_0x58822e,_0x4c01f6){await _0x4a0934['waitForSelector'](_0x58822e,_0x4c01f6),await _0x4a0934['click'](_0x58822e);}module['exports']={'clickWhenReady':clickWhenReady};

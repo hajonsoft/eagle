@@ -286,8 +286,8 @@ const visaInfoConfig = [
         value: (row) => row.sponsorId,
       },
       {
-        selector: "#Embassy",
-        value: (row) => "302",
+        selector: SELECTORS.visaInfoLogin.embassy,
+        value: (row) => row.embassy,
       },
     ],
   },
