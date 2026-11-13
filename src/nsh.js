@@ -8,6 +8,8 @@ const path = require("path");
 const util = require("./util");
 const { getPath } = require("./lib/getPath");
 const { isEnglishOnly } = require("./lib/language");
+const { logBrowserError } = require("./targets/common/browser-error");
+const { installTurnstileCapture, solveTurnstile } = require("./targets/common/turnstile");
 const moment = require("moment");
 const os = require("os");
 const kea = require("./lib/kea");
@@ -380,8 +382,13 @@ async function send(sendData) {
     await runParallel();
     return;
   }
-  page = await util.initPage(config, onContentLoaded);
-  onContentLoaded();
+  page = await util.initPage(config, (res) => {
+    // The route watcher can tick before initPage has returned the page.
+    if (!page) return false;
+    return onContentLoaded(res);
+  }, data);
+  await installTurnstileCapture(page);
+  await page.goto(URLS.HOME);
 }
 let timeoutId;
 const MAX_WAIT_TIME_MS = 600000;
@@ -416,6 +423,7 @@ function readSubmissionGorilla() {
   } catch (error) { }
 }
 async function onContentLoaded(res) {
+  await installTurnstileCapture(page);
   clearTimeout(timeoutId);
   timeoutId = setTimeout(handleTimeout, MAX_WAIT_TIME_MS);
   counter = util.useCounter(counter);
@@ -446,7 +454,8 @@ async function onContentLoaded(res) {
   try {
     await pageContentHandler(currentConfig);
   } catch (err) {
-    console.log(err);
+    logBrowserError(err, `Nusuk Hajj: ${currentConfig?.name || "processing the page"}`);
+    return false;
   }
 
   const afterGorillaConfig = await util.findGorillaConfig(
@@ -1596,20 +1605,11 @@ async function provokeMaleGorilla() {
     return;
   }
   await takeScreenShot();
+  const purchasePackageSelector = "#btnProcessBooking";
   try {
-    const purchasePackageSelector = "#btnProcessBooking";
     await page.waitForSelector(purchasePackageSelector);
-    const captchaCode = await util.SolveIamNotARobot(
-      "#g-recaptcha-response",
-      URLS.SIGN_UP,
-      "6LcNy-0jAAAAAJDOXjYW4z7yV07DWyivFD1mmjek",
-      registerCaptchaAbortController.signal
-    );
-    if (captchaCode) {
-      await page.click(purchasePackageSelector);
-      console.log("Clicked 'Purchase Package' button.");
-    }
-  } catch {
+  } catch (error) {
+    if (error.name !== "TimeoutError") throw error;
     console.log("'Purchase Package' button not found.");
     const passenger = data.travellers[util.getSelectedTraveler()];
     await kea.updatePassenger(data.system.accountId, passenger.passportNumber, {
@@ -1618,7 +1618,15 @@ async function provokeMaleGorilla() {
       "submissionData.nsh.rejectionReason": "Purchase button not present",
     });
     global.submissionGorilla = null;
+    return;
   }
+  await solveTurnstile({
+    page,
+    scopeSelector: purchasePackageSelector,
+    captchaOptions: { signal: registerCaptchaAbortController.signal },
+  });
+  await page.click(purchasePackageSelector);
+  console.log("Clicked 'Purchase Package' button.");
 
   // for (let i = 0; i < 20; i++) {
   //   const gorilla = kea.getGorilla();
@@ -2159,30 +2167,11 @@ async function signup_step1(selectedTraveler) {
   await checkIfNotChecked("#chkResidenceCountry");
   await checkIfNotChecked("#SignupViewModel_AgreeToTermsAndCondition");
   await checkIfNotChecked("#SignupViewModel_SubscribeToNewsLetter");
-  // await util.infoMessage(page, "Captcha ...");
-  // const captchaCode = await util.SolveIamNotARobot(
-  //   "#g-recaptcha-response",
-  //   URLS.SIGN_UP,
-  //   "6LcNy-0jAAAAAJDOXjYW4z7yV07DWyivFD1mmjek",
-  //   registerCaptchaAbortController.signal
-  // );
-
-  // if (captchaCode) {
-  //   await page.click(
-  //     "body > main > div.signup > div > div.container-lg.container-fluid.position-relative.h-100 > div > div > div.row > div > form > input.btn.btn-main.px-5.mt-5.w-100"
-  //   );
-  // }
-
-  // if (!captchaCode) {
-  //   await util.infoMessage(page, "Manual captcha required ...");
-  //   if (clicked?.["signup_1"]?.[passenger.passportNumber]) {
-  //     return;
-  //   } else {
-  //     await signup_step1(selectedTraveler);
-  //     clicked["signup_1"] = {};
-  //     clicked["signup_1"][passenger.passportNumber] = true;
-  //   }
-  // }
+  await solveTurnstile({
+    page,
+    scopeSelector: "#SignupViewModel_Email",
+    captchaOptions: { signal: registerCaptchaAbortController.signal },
+  });
 }
 
 async function loginPassenger(selectedTraveler) {
@@ -2221,13 +2210,11 @@ async function loginPassenger(selectedTraveler) {
     passenger
   );
 
-  // util.infoMessage(page, `Captcha ...`);
-  // const loginCaptchaValue = await util.SolveIamNotARobot(
-  //   "#g-recaptcha-response",
-  //   URLS.LOGIN,
-  //   "6LcNy-0jAAAAAJDOXjYW4z7yV07DWyivFD1mmjek",
-  //   loginCaptchaAbortController.signal
-  // );
+  await solveTurnstile({
+    page,
+    scopeSelector: "#LogInViewModel_Email",
+    captchaOptions: { signal: loginCaptchaAbortController.signal },
+  });
 
   // if (!loginCaptchaValue) {
   //   util.infoMessage(page, `Manual captcha required`);

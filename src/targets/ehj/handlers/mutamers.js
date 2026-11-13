@@ -1,1 +1,1 @@
-const {SELECTORS}=require('../selectors');async function handler({page:_0x3338eb}){await _0x3338eb['waitForSelector'](SELECTORS['mutamerList']['addMutamerButton']),await _0x3338eb['click'](SELECTORS['mutamerList']['addMutamerButton']);}module['exports']={'handler':handler};
+const {SELECTORS}=require('../selectors');async function handler({page:_0x16d13e}){await _0x16d13e['waitForSelector'](SELECTORS['mutamerList']['addMutamerButton']),await _0x16d13e['click'](SELECTORS['mutamerList']['addMutamerButton']);}module['exports']={'handler':handler};

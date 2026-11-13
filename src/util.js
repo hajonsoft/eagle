@@ -9,8 +9,14 @@ const RecaptchaPlugin = require("puppeteer-extra-plugin-recaptcha");
 // puppeteer.use(RecaptchaPlugin());
 const { getPath } = require("./lib/getPath");
 const { isEnglishOnly } = require("./lib/language");
+const { logBrowserError } = require("./targets/common/browser-error");
 const { solveRecaptchaV2 } = require("./lib/captcha");
 const { solveNormalCaptcha } = require("./lib/captcha");
+const {
+  renewBusyCursor,
+  withBusyCursor,
+  withCriticalCursor,
+} = require("./lib/cursor-manager");
 
 const sharp = require("sharp");
 const budgie = require("./budgie");
@@ -53,58 +59,109 @@ function shouldDispatchRoute({
   );
 }
 
-function getChromePath() {
+function getSystemChromeCandidates() {
   switch (os.platform()) {
     case "darwin":
-      const chromePath =
-        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome";
-      if (fs.existsSync(chromePath)) {
-        console.log(os.platform(), chromePath);
-        return chromePath;
-      }
-
-      throw new Error(`Google Chrome not found at ${chromePath}`);
-      break;
+      return [
+        path.join(
+          "/Applications",
+          "Google Chrome.app",
+          "Contents",
+          "MacOS",
+          "Google Chrome",
+        ),
+        path.join(
+          homedir,
+          "Applications",
+          "Google Chrome.app",
+          "Contents",
+          "MacOS",
+          "Google Chrome",
+        ),
+      ];
     case "linux":
-      const linuxChromePath = "/usr/bin/google-chrome-stable";
-      if (fs.existsSync(linuxChromePath)) {
-        console.log(os.platform(), linuxChromePath);
-        return linuxChromePath;
-      }
-
-      throw new Error(`Google Chrome not found at ${linuxChromePath}`);
-      break;
+      return (process.env.PATH || "")
+        .split(path.delimiter)
+        .flatMap((directory) =>
+          ["google-chrome-stable", "google-chrome", "chromium", "chromium-browser"].map(
+            (name) => path.join(directory, name),
+          ),
+        );
+    case "win32":
+      return [
+        process.env.PROGRAMFILES,
+        process.env["PROGRAMFILES(X86)"],
+        process.env.LOCALAPPDATA,
+      ]
+        .filter(Boolean)
+        .map((directory) =>
+          path.join(directory, "Google", "Chrome", "Application", "chrome.exe"),
+        );
     default:
-      const windows46ChromePath =
-        "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-      if (fs.existsSync(windows46ChromePath)) {
-        console.log(os.platform(), windows46ChromePath);
-        return windows46ChromePath;
-      }
-      const userPath = path.join(
-        homedir,
-        "AppData",
-        "Local",
-        "Google",
-        "Chrome",
-        "Application",
-        "chrome.exe",
-      );
-      if (fs.existsSync(userPath)) {
-        console.log(os.platform(), userPath);
-        return userPath;
-      }
-
-      const windows32ChromePath =
-        "C:\\Program Files (x86)\\Google\\Chrome\\Application\\chrome.exe";
-      if (fs.existsSync(windows32ChromePath)) {
-        console.log(os.platform(), windows32ChromePath);
-        return windows32ChromePath;
-      }
-      throw new Error(
-        `Google Chrome not found at ${windows32ChromePath} or ${windows46ChromePath}`,
-      );
+      return [];
   }
+}
+
+function getChromePath() {
+  const chromePath = getSystemChromeCandidates().find((candidate) =>
+    fs.existsSync(candidate),
+  );
+  if (chromePath) {
+    return chromePath;
+  }
+
+  throw new Error(
+    `Google Chrome not found. Checked: ${getSystemChromeCandidates().join(", ") || "no known locations for this platform"}`,
+  );
+}
+
+function getChromeInstallInstructions(executablePath) {
+  const pathSegments = executablePath.split(path.sep);
+  const versionDirectoryIndex = pathSegments.findIndex((segment) =>
+    /^(win32|win64|linux|mac|mac_arm)-\d+\.\d+\.\d+\.\d+$/.test(segment),
+  );
+  if (versionDirectoryIndex < 0) {
+    return "Run `npx puppeteer browsers install chrome` to install Puppeteer's matching Chrome.";
+  }
+
+  const versionDirectory = pathSegments[versionDirectoryIndex];
+  const [, cachePlatform, version] = versionDirectory.match(
+    /^(win32|win64|linux|mac|mac_arm)-(\d+\.\d+\.\d+\.\d+)$/,
+  );
+  const archivePlatform = {
+    win32: "win32",
+    win64: "win64",
+    linux: "linux64",
+    mac: "mac-x64",
+    mac_arm: "mac-arm64",
+  }[cachePlatform];
+  const archiveFolder = `chrome-${archivePlatform}`;
+  const versionDirectoryPath = executablePath.slice(
+    0,
+    executablePath.indexOf(`${path.sep}${versionDirectory}${path.sep}`) +
+      versionDirectory.length +
+      path.sep.length,
+  );
+  const downloadUrl = `https://storage.googleapis.com/chrome-for-testing-public/${version}/${archivePlatform}/${archiveFolder}.zip`;
+  const destinationPath = path.join(versionDirectoryPath, archiveFolder);
+
+  if (os.platform() === "win32") {
+    return [
+      `curl.exe -L -o ${archiveFolder}.zip ${downloadUrl}`,
+      `tar -xf ${archiveFolder}.zip`,
+      `New-Item -ItemType Directory -Force -Path "${versionDirectoryPath}"`,
+      `Copy-Item -Path ".\\${archiveFolder}" -Destination "${versionDirectoryPath}" -Recurse -Force`,
+      `Expected Chrome folder: ${destinationPath}`,
+    ].join("\n");
+  }
+
+  return [
+    `curl -L -o ${archiveFolder}.zip ${downloadUrl}`,
+    `tar -xf ${archiveFolder}.zip`,
+    `mkdir -p "${versionDirectoryPath}"`,
+    `cp -R "${archiveFolder}" "${versionDirectoryPath}"`,
+    `Expected Chrome folder: ${destinationPath}`,
+  ].join("\n");
 }
 
 function getIssuingCountry(passenger) {
@@ -338,24 +395,28 @@ async function initPage(config, onContentLoaded, data) {
     }
   }
 
-  // if (global.debug || (!isCloudRun && !isHeadless)) {
-  //   launchOptions.executablePath = getChromePath();
-  // }
-  const connected = await connectOrOpenDisconnectedChrome();
-  if (!connected) {
-    try {
+  const chromeExecutablePath =
+    launchOptions.executablePath || puppeteer.executablePath();
+  if (fs.existsSync(chromeExecutablePath)) {
+    console.log(`✅ Chrome executable found: ${chromeExecutablePath}`);
+  } else {
+    console.log(`❌ Chrome executable missing: ${chromeExecutablePath}`);
+    console.log("Install the matching Chrome build with these commands:");
+    console.log(getChromeInstallInstructions(chromeExecutablePath));
+  }
+
+  try {
+    browser = await puppeteer.launch(launchOptions);
+  } catch (error) {
+    if (shouldUseHeadless) {
+      console.log(
+        "Headless=new launch failed, retrying with legacy headless:",
+        error.message,
+      );
+      launchOptions.headless = true;
       browser = await puppeteer.launch(launchOptions);
-    } catch (error) {
-      if (shouldUseHeadless) {
-        console.log(
-          "Headless=new launch failed, retrying with legacy headless:",
-          error.message,
-        );
-        launchOptions.headless = true;
-        browser = await puppeteer.launch(launchOptions);
-      } else {
-        throw error;
-      }
+    } else {
+      throw error;
     }
   }
   const allPages = await browser.pages();
@@ -398,14 +459,16 @@ async function initPage(config, onContentLoaded, data) {
           continue;
         }
 
-        const handled = await onContentLoaded({ reason, url: currentUrl });
+        const handled = await withBusyCursor(page, () =>
+          onContentLoaded({ reason, url: currentUrl }),
+        );
         if (handled !== false) {
           lastHandledUrl = normalizedUrl;
           lastHandledDocumentRevision = currentDocumentRevision;
         }
       } while (routeDispatchPending);
     } catch (error) {
-      console.error("Route handler failed:", error);
+      logBrowserError(error, "Processing the current workflow step");
     } finally {
       routeDispatchInFlight = false;
       if (routeDispatchPending) {
@@ -487,124 +550,6 @@ async function initPage(config, onContentLoaded, data) {
   // });
 
   return page;
-}
-
-async function connectOrOpenDisconnectedChrome() {
-  // Configuration for systems that require remote debugging mode
-  const systemConfigs = {
-    nsh: { targetUrl: "https://hajj.nusuk.sa" },
-    // nsk: { targetUrl: "https://masar.nusuk.sa" },
-  };
-
-  const rawData = fs.readFileSync(getPath("data.json"), "utf8");
-  const dataJson = JSON.parse(rawData);
-  const systemName = dataJson?.system?.name;
-  const nshMode = systemConfigs.hasOwnProperty(systemName);
-  if (nshMode) {
-    const remoteDebuggingPort = process.env.REMOTE_DEBUGGING_PORT || "9222";
-    const browserURL = `http://127.0.0.1:${remoteDebuggingPort}`;
-
-    // Calculate defaultViewport for NSH mode connection
-    let defaultViewport = null;
-    if (process.argv.includes("--auto")) {
-      const autoIndexArg = process.argv.find((c) => c.startsWith("--index"));
-      if (autoIndexArg) {
-        const indexArray = autoIndexArg.split("=")?.[1]?.split("/");
-        if (indexArray.length === 2) {
-          const monitorWidth = parseInt(
-            process.argv
-              .find((c) => c.startsWith("--monitor-width"))
-              ?.split("=")?.[1],
-          );
-          const monitorHeight = parseInt(
-            process.argv
-              .find((c) => c.startsWith("--monitor-height"))
-              ?.split("=")?.[1],
-          );
-
-          if (monitorWidth && monitorHeight) {
-            defaultViewport = {
-              width: monitorWidth,
-              height: monitorHeight,
-            };
-          }
-        }
-      }
-    }
-
-    try {
-      console.log(
-        `NSH Mode: Attempting to connect to browser at ${browserURL}`,
-      );
-      browser = await puppeteer.connect({
-        browserURL,
-        defaultViewport,
-      });
-      console.log(
-        "NSH Mode: Successfully connected to existing browser session",
-      );
-      return true;
-    } catch (connectError) {
-      console.log(
-        `NSH Mode: Failed to connect to existing browser: ${connectError.message}`,
-      );
-      console.log("NSH Mode: Launching Chrome in remote debugging mode");
-
-      // Launch Chrome in remote debugging mode with platform-specific command
-      const { exec } = require("child_process");
-      const targetUrl =
-        systemConfigs[systemName]?.targetUrl || "https://hajj.nusuk.sa";
-
-      // Platform-specific user data directory
-      let userDataDir;
-      if (os.platform() === "win32") {
-        userDataDir = path.join(os.tmpdir(), "chrome-profile");
-      } else {
-        userDataDir = "/tmp/chrome-profile";
-      }
-
-      let chromeCommand;
-      if (os.platform() === "darwin") {
-        // macOS command
-        chromeCommand = `/Applications/Google\\ Chrome.app/Contents/MacOS/Google\\ Chrome \
-          --remote-debugging-port=${remoteDebuggingPort} \
-          --user-data-dir="${userDataDir}" \
-          "${targetUrl}"`;
-      } else if (os.platform() === "win32") {
-        // Windows command
-        const chromePath = getChromePath();
-        chromeCommand = `"${chromePath}" --remote-debugging-port=${remoteDebuggingPort} \
-          --user-data-dir="${userDataDir}" \
-          "${targetUrl}"`;
-      } else {
-        // Linux command
-        chromeCommand = `google-chrome --remote-debugging-port=${remoteDebuggingPort} \
-          --user-data-dir="${userDataDir}" \
-          "${targetUrl}" &`;
-      }
-
-      console.log(`NSH Mode: Executing command: ${chromeCommand}`);
-      exec(chromeCommand, (error) => {
-        if (error) {
-          console.error(`NSH Mode: Error launching Chrome: ${error.message}`);
-        }
-      });
-
-      // Wait for Chrome to start
-      console.log("NSH Mode: Waiting for Chrome to start...");
-      await new Promise((resolve) => setTimeout(resolve, 3000));
-
-      console.log("NSH Mode: Chrome launched successfully in debugging mode.");
-      console.log(`NSH Mode: Chrome is running on port ${remoteDebuggingPort}`);
-      console.log("NSH Mode: You can now work with Chrome normally.");
-      console.log("NSH Mode: Run the program again to connect and automate.");
-      console.log("NSH Mode: Exiting...");
-
-      // Exit the process to let user work with Chrome
-      process.exit(0);
-    }
-  }
-  return false;
 }
 
 async function newPage(onNewPageLoaded, onNewPageClosed) {
@@ -1112,10 +1057,8 @@ async function controller(page, structure, travellers) {
     }
 
     await ensureExposedFunction(page, "registerLoop", registerLoop);
-    await ensureExposedFunction(
-      page,
-      controllerHandleMethod,
-      structure.controller.action,
+    await ensureExposedFunction(page, controllerHandleMethod, (...args) =>
+      withBusyCursor(page, () => structure.controller.action(...args)),
     );
     await ensureExposedFunction(page, "unregisterLoop", unregisterLoop);
     await ensureExposedFunction(page, "getVisaCount", getVisaCount);
@@ -1367,9 +1310,8 @@ async function commander(page, structure, travellers) {
       controllerHandleMethod,
     );
     if (!isExposed) {
-      await page.exposeFunction(
-        controllerHandleMethod,
-        structure.controller.action,
+      await page.exposeFunction(controllerHandleMethod, (...args) =>
+        withBusyCursor(page, () => structure.controller.action(...args)),
       );
     }
 
@@ -2093,6 +2035,25 @@ async function commitNormalCaptchaWithSelector(
   textFieldSelector,
   captchaOptions = {},
 ) {
+  return withCriticalCursor(
+    page,
+    "Eagle is solving the CAPTCHA. Please do not click or type.",
+    () => commitNormalCaptchaWhileCritical(
+      page,
+      imageSelector,
+      textFieldSelector,
+      captchaOptions,
+    ),
+    { timeoutMs: 240000 },
+  );
+}
+
+async function commitNormalCaptchaWhileCritical(
+  page,
+  imageSelector,
+  textFieldSelector,
+  captchaOptions = {},
+) {
   infoMessage(page, "🔓 Captcha thinking...", 5);
   await pauseMessage(page, 3);
   await showCaptchaSnackbar(page, "Submitting task to 2Captcha...", "info");
@@ -2150,6 +2111,7 @@ async function commitNormalCaptchaWithSelector(
       pollIntervalMs: captchaOptions.pollIntervalMs,
       signal: captchaOptions.signal,
       onPoll: async (attempt, taskId) => {
+        await renewBusyCursor(page);
         await showCaptchaSnackbar(
           page,
           `Waiting for solve (${attempt}/${maxCaptchaAttempts}), task ${taskId}`,

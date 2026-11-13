@@ -1,0 +1,230 @@
+{
+  "name": "jssha",
+  "version": "3.3.2",
+  "description": "jsSHA implements the complete Secure Hash Standard (SHA) family (SHA-1, SHA-224/256/384/512, SHA3-224/256/384/512, SHAKE128/256, cSHAKE128/256, and KMAC128/256) with HMAC",
+  "main": "./dist/sha.js",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/sha.d.mts",
+        "default": "./dist/sha.mjs"
+      },
+      "require": {
+        "types": "./dist/sha.d.cts",
+        "default": "./dist/sha.js"
+      }
+    },
+    "./sha1": {
+      "import": {
+        "types": "./dist/sha1.d.mts",
+        "default": "./dist/sha1.mjs"
+      },
+      "require": {
+        "types": "./dist/sha1.d.cts",
+        "default": "./dist/sha1.js"
+      }
+    },
+    "./dist/sha1": {
+      "import": {
+        "types": "./dist/sha1.d.mts",
+        "default": "./dist/sha1.mjs"
+      },
+      "require": {
+        "types": "./dist/sha1.d.cts",
+        "default": "./dist/sha1.js"
+      }
+    },
+    "./sha256": {
+      "import": {
+        "types": "./dist/sha256.d.mts",
+        "default": "./dist/sha256.mjs"
+      },
+      "require": {
+        "types": "./dist/sha256.d.cts",
+        "default": "./dist/sha256.js"
+      }
+    },
+    "./dist/sha256": {
+      "import": {
+        "types": "./dist/sha256.d.mts",
+        "default": "./dist/sha256.mjs"
+      },
+      "require": {
+        "types": "./dist/sha256.d.cts",
+        "default": "./dist/sha256.js"
+      }
+    },
+    "./sha512": {
+      "import": {
+        "types": "./dist/sha512.d.mts",
+        "default": "./dist/sha512.mjs"
+      },
+      "require": {
+        "types": "./dist/sha512.d.cts",
+        "default": "./dist/sha512.js"
+      }
+    },
+    "./dist/sha512": {
+      "import": {
+        "types": "./dist/sha512.d.mts",
+        "default": "./dist/sha512.mjs"
+      },
+      "require": {
+        "types": "./dist/sha512.d.cts",
+        "default": "./dist/sha512.js"
+      }
+    },
+    "./sha3": {
+      "import": {
+        "types": "./dist/sha3.d.mts",
+        "default": "./dist/sha3.mjs"
+      },
+      "require": {
+        "types": "./dist/sha3.d.cts",
+        "default": "./dist/sha3.js"
+      }
+    },
+    "./dist/sha3": {
+      "import": {
+        "types": "./dist/sha3.d.mts",
+        "default": "./dist/sha3.mjs"
+      },
+      "require": {
+        "types": "./dist/sha3.d.cts",
+        "default": "./dist/sha3.js"
+      }
+    },
+    "./package.json": "./package.json"
+  },
+  "module": "./dist/sha.mjs",
+  "types": "./dist/sha.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Caligatio/jsSHA.git"
+  },
+  "keywords": [
+    "SHA-1",
+    "SHA-224",
+    "SHA3-224",
+    "SHA-256",
+    "SHA3-256",
+    "SHA-384",
+    "SHA3-384",
+    "SHA-512",
+    "SHA3-512",
+    "SHAKE-128",
+    "SHAKE-256",
+    "SHAKE128",
+    "SHAKE256",
+    "cSHAKE128",
+    "cSHAKE256",
+    "KMAC128",
+    "KMAC256",
+    "SHA1",
+    "SHA224",
+    "SHA256",
+    "SHA384",
+    "SHA512",
+    "SHA-2",
+    "SHA2",
+    "SHA-3",
+    "SHA3",
+    "SHAKE",
+    "cSHAKE",
+    "cSHAKE-128",
+    "cSHAKE-256",
+    "HMAC",
+    "KMAC",
+    "KMAC-128",
+    "KMAC-256",
+    "hash",
+    "cryptography"
+  ],
+  "license": "BSD-3-Clause",
+  "author": "Brian Turek <brian.turek@gmail.com>",
+  "bugs": {
+    "url": "https://github.com/Caligatio/jsSHA/issues"
+  },
+  "engines": {
+    "node": "*"
+  },
+  "homepage": "https://github.com/Caligatio/jsSHA",
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@rollup/plugin-terser": "^1.0.0",
+    "@rollup/plugin-typescript": "^12.3.0",
+    "@types/chai": "^4",
+    "@types/mocha": "^10.0.10",
+    "@types/rewire": "^2.5.30",
+    "@types/sinon": "^21.0.1",
+    "chai": "^4",
+    "eslint": "^10.5.0",
+    "husky": "^9.1.7",
+    "karma": "^6.4.4",
+    "karma-chai": "^0.1.0",
+    "karma-chrome-launcher": "^3.2.0",
+    "karma-firefox-launcher": "^2.1.3",
+    "karma-mocha": "^2.0.1",
+    "lint-staged": "^17.0.8",
+    "mocha": "^11.7.6",
+    "nyc": "^18.0.0",
+    "prettier": "^3.8.4",
+    "rewire": "^9.0.1",
+    "rollup": "^4.62.2",
+    "rollup-plugin-dts": "^6.4.1",
+    "sinon": "^22.0.0",
+    "ts-node": "^10.9.2",
+    "tslib": "^2.8.1",
+    "typescript": "<5.5",
+    "typescript-eslint": "^8.62.0"
+  },
+  "scripts": {
+    "build": "rollup -c && node scripts/generate-dual-types.mjs",
+    "test": "nyc --reporter=html --reporter=text mocha test/src/*.ts",
+    "test_dist": "mocha test/dist/ && karma start karma.conf.js --file-variant sha && karma start karma.conf.js --file-variant sha1 && karma start karma.conf.js --file-variant sha256 && karma start karma.conf.js --file-variant sha512 && karma start karma.conf.js --file-variant sha3",
+    "prepare": "husky"
+  },
+  "mocha": {
+    "require": [
+      "ts-node/register"
+    ],
+    "timeout": 10000,
+    "node-option": [
+      "no-experimental-strip-types"
+    ]
+  },
+  "nyc": {
+    "require": [
+      "ts-node/register"
+    ],
+    "exclude": [
+      "dist",
+      "*.js",
+      "coverage",
+      "test",
+      "scripts",
+      "rollup.config.mjs"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ],
+    "all": true
+  },
+  "prettier": {
+    "printWidth": 120,
+    "proseWrap": "always",
+    "overrides": [
+      {
+        "files": "*.md",
+        "options": {
+          "printWidth": 80
+        }
+      }
+    ]
+  },
+  "lint-staged": {
+    "*.{js,ts}": "eslint --cache --fix",
+    "*.{js,ts,css,md,html,json}": "prettier --write"
+  }
+}

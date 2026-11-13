@@ -1,272 +1,234 @@
 # Hajonsoft Eagle
 
+**Passport and visa workflows with less repetitive work.**
+
+[English](#english) | [Français](#français) | [العربية](#العربية) | [हिन्दी](#हिन्दी)
+
+### Quick install / Installation rapide / التثبيت السريع / एक-कमांड इंस्टॉल
+
+Bash, zsh, or PowerShell 7+:
+
+```sh
+git clone https://github.com/hajonsoft/eagle.git && cd eagle && npm install
+```
+
+Windows PowerShell 5.1:
+
+```powershell
+git clone https://github.com/hajonsoft/eagle.git; if ($?) { Set-Location eagle; npm install }
+```
+
 ## English
 
-### What is Eagle?
+### A clearer workflow for your team
 
-Hajonsoft Eagle is a powerful automation tool for teams that process passports,
-traveler documents, and applications. It reads your document data and submits it
-to external systems, helping your team complete repetitive work faster and with
-fewer data-entry errors.
+Hajonsoft Eagle helps teams prepare traveler information and complete supported
+visa workflows with fewer repetitive steps. It brings passport details and
+application tasks into one guided workflow on your computer, with a browser
+window you can follow as Eagle works.
 
-Eagle runs directly on your computer, giving your team a fast and practical
-workspace for daily operations. Owl uses the same engine on Hajonsoft-managed
-cloud machines, while Eagle gives you the convenience and control of running
-the workflow locally.
+Eagle is designed to help teams spend less time re-entering information and
+more time reviewing the details that matter. Your team remains responsible for
+checking traveler data and following the destination service's requirements.
 
-### Why is it called Eagle?
+### Get started
 
-The eagle is a bird of prey known for its power, speed, and keen eyesight. The
-name reflects what Eagle brings to your operation: clear document recognition,
-fast execution, and the strength to handle demanding workloads.
+You will need **Node.js LTS** and **Git**:
 
-### How Eagle helps your business
+1. Install Node.js from [nodejs.org](https://nodejs.org/).
+2. Install Git from [git-scm.com/downloads](https://git-scm.com/downloads).
+3. Open Terminal on macOS/Linux or PowerShell on Windows, then run:
 
-- **Faster document processing:** Send complete document packages in one action
-	instead of searching for and uploading each file separately.
-- **One-click resubmission:** Correct and resubmit an application quickly when a
-	destination system requests it.
-- **Less manual entry:** Reuse captured information for applications and printed
-	documents, while retaining important values such as MOFA numbers.
-- **Smarter document capture:** Use document recognition to capture passport
-	details, including issue dates, without relying on an expensive 3M scanner.
-- **Early validation:** Identify expired passports, duplicate records, and other
-	issues before they slow down the application process.
-- **Better workflow continuity:** Reduce the risk of losing progress because of
-	destination-system timeouts.
-- **Flexible passport handling:** Help resolve MRZ and parsing limitations,
-	including cases involving issuing-authority details or nationality recognition.
-- **Faster Hajj workflows:** Import MOFA numbers and automate Hajj smart-form
-	data entry.
-- **A stronger support platform:** Give Hajonsoft support teams a consistent,
-	scalable workflow for assisting clients and processing large volumes of
-	passports.
-- **Secure access:** Support passwordless login and two-factor authentication.
-- **Less friction:** Reduce repetitive captcha-related steps where supported by
-	the connected system.
+   ```bash
+   git clone https://github.com/hajonsoft/eagle.git
+   cd eagle
+   npm install
+   ```
 
-### Installation
+### Check your setup
 
-Before installing Eagle, install the latest versions of **Node.js** and **Git**.
-
-1. Download Node.js from [nodejs.org](https://nodejs.org/) and choose the latest
-	 LTS version. After installation, open Terminal (macOS/Linux) or PowerShell
-	 (Windows) and confirm it is available:
-
-	 ```bash
-	 node --version
-	 npm --version
-	 ```
-
-2. Download Git from [git-scm.com/downloads](https://git-scm.com/downloads)
-	 and follow the installer. Confirm it is available in Terminal or PowerShell:
-
-	 ```bash
-	 git --version
-	 ```
-
-3. Clone Eagle from GitHub, move into its folder, and install its dependencies:
-
-	 ```bash
-	 git clone https://github.com/hajonsoft/eagle.git
-	 cd eagle
-	 npm i
-	 ```
-
-### Updating Eagle
-
-When a new version is available, open Terminal or PowerShell inside the Eagle
-folder and run:
+Confirm the tools are available, then check Eagle's installed version:
 
 ```bash
-git pull origin main
+node --version
+npm --version
+git --version
+node . -v
 ```
 
-This downloads the latest changes while preserving local changes whenever Git
-can merge them. To make your local copy exactly match the latest `main` branch,
-run:
+The version check confirms the local installation. A real workflow also needs
+the traveler data, account access, and run instructions provided by your
+organization. Do not start a live submission until those are ready.
 
-```bash
-git fetch origin
-git reset --hard origin/main
-```
+### Browser help
 
-The reset command removes local changes to tracked files. After either update
-method, install any updated dependencies:
+Eagle prints the Chrome executable path it expects when it starts. If Chrome is
+missing, the console shows the matching download version and installation
+commands for your computer. Follow those commands exactly; the version and
+destination are generated from the installed Puppeteer package.
 
-```bash
-npm i
-```
-## العربية
-
-### ما هو النسر؟
-
-Hajonsoft النسر هو أداة أتمتة قوية للفرق التي تعالج جوازات السفر ووثائق
-المسافرين والطلبات. يقرأ بيانات المستندات ويرسلها إلى الأنظمة الخارجية، مما
-يساعد فريقك على إنجاز الأعمال المتكررة بسرعة أكبر وبأخطاء أقل في إدخال البيانات.
-
-يعمل النسر مباشرة على جهاز الكمبيوتر الخاص بك، ليمنح فريقك بيئة عملية وسريعة
-للعمليات اليومية. أما Owl فيستخدم المحرك نفسه على أجهزة سحابية تديرها
-Hajonsoft، بينما يمنحك النسر مرونة وتحكماً أكبر من خلال التشغيل المحلي.
-
-### لماذا سُمّي النسر؟
-
-النسر طائر جارح معروف بقوته وسرعته وقوة بصره. ويعكس الاسم ما يقدمه النسر
-لعملياتك: قراءة واضحة للمستندات، وتنفيذ سريع، وقدرة على التعامل مع أحجام العمل
-الكبيرة.
-
-### فوائد النسر لعملك
-
-- معالجة أسرع للمستندات وإرسال حزمة المستندات كاملة في خطوة واحدة.
-- إعادة إرسال الطلبات بنقرة واحدة بدلاً من تكرار جميع الخطوات.
-- إعادة استخدام البيانات التي تم التقاطها في الطلبات والمستندات المطبوعة.
-- التقاط بيانات مهمة مثل أرقام MOFA وتفاصيل جواز السفر وتاريخ الإصدار.
-- التحقق المبكر من الجوازات المنتهية والسجلات المكررة والمشكلات المحتملة.
-- تقليل خطر فقدان التقدم بسبب انتهاء مهلة النظام الخارجي.
-- المساعدة في معالجة قيود MRZ ومشكلات قراءة الجنسية أو بيانات جهة الإصدار.
-- استيراد أرقام MOFA وأتمتة إدخال بيانات نموذج الحج الذكي.
-- دعم تسجيل الدخول دون كلمة مرور والمصادقة الثنائية.
-- تقليل الخطوات المتكررة المرتبطة بـ captcha حيثما يدعم النظام المتصل ذلك.
-
-### التثبيت
-
-قبل تثبيت النسر، ثبّت أحدث إصدار من **Node.js** و **Git**.
-
-1. نزّل Node.js من [nodejs.org](https://nodejs.org/) واختر أحدث إصدار LTS.
-	 بعد التثبيت افتح Terminal على macOS/Linux أو PowerShell على Windows وتحقق
-	 من التثبيت:
-
-	 ```bash
-	 node --version
-	 npm --version
-	 ```
-
-2. نزّل Git من [git-scm.com/downloads](https://git-scm.com/downloads) واتبع
-	 خطوات التثبيت. ثم تحقق من التثبيت:
-
-	 ```bash
-	 git --version
-	 ```
-
-3. انسخ النسر من GitHub، وانتقل إلى مجلده، وثبّت الاعتماديات:
-
-	 ```bash
-	 git clone https://github.com/hajonsoft/eagle.git
-	 cd eagle
-	 npm i
-	 ```
-
-### تحديث النسر
-
-عند توفر إصدار جديد، افتح Terminal أو PowerShell داخل مجلد النسر وشغّل:
-
-```bash
-git pull origin main
-```
-
-ولجعل النسخة المحلية مطابقة تماماً لأحدث نسخة من فرع `main`، شغّل:
-
-```bash
-git fetch origin
-git reset --hard origin/main
-```
-
-يحذف أمر reset التغييرات المحلية في الملفات المتتبعة. بعد التحديث، ثبّت أي
-اعتماديات جديدة:
-
-```bash
-npm i
-```
+If the console says Chrome was closed or the page changed, reopen Chrome if
+needed, wait for the page to settle, and retry. Restart Eagle if the issue
+continues. For help with your organization's setup, contact your team lead or
+Hajonsoft representative.
 
 ## Français
 
-### Qu'est-ce qu'Eagle ?
+### Un parcours plus simple pour votre équipe
 
-Hajonsoft Eagle est un puissant outil d'automatisation pour les équipes qui
-traitent les passeports, les documents des voyageurs et les demandes. Il lit les
-données de vos documents et les transmet aux systèmes externes, afin d'accélérer
-les tâches répétitives et de réduire les erreurs de saisie.
+Hajonsoft Eagle aide les équipes à préparer les informations des voyageurs et
+à suivre les démarches de visa prises en charge, avec moins d'étapes répétitives.
+Les données du passeport et les tâches de la demande sont réunies dans un parcours
+guidé sur votre ordinateur, avec une fenêtre de navigateur que vous pouvez suivre.
 
-Eagle fonctionne directement sur votre ordinateur pour offrir à votre équipe un
-environnement rapide et pratique au quotidien. Owl utilise le même moteur sur
-des machines cloud gérées par Hajonsoft, tandis qu'Eagle vous donne la maîtrise
-et la souplesse d'un fonctionnement local.
-
-### Pourquoi le nom Eagle ?
-
-L'aigle est un rapace reconnu pour sa puissance, sa vitesse et sa vue perçante.
-Ce nom représente les avantages d'Eagle : une lecture précise des documents,
-une exécution rapide et la capacité de gérer des volumes importants.
-
-### Les avantages d'Eagle pour votre activité
-
-- Traiter les documents plus rapidement et envoyer un dossier complet en une
-	seule action.
-- Réenvoyer une demande en un clic au lieu de répéter toutes les étapes.
-- Réutiliser les données capturées pour les demandes et les documents imprimés.
-- Capturer les informations importantes, comme les numéros MOFA et la date de
-	délivrance, grâce à la reconnaissance des documents.
-- Détecter en amont les passeports expirés, les doublons et les problèmes
-	potentiels.
-- Réduire le risque de perdre votre progression à cause d'un délai d'expiration
-	du système externe.
-- Aider à traiter les limites du MRZ et les problèmes de lecture de nationalité
-	ou d'autorité émettrice.
-- Importer les numéros MOFA et automatiser la saisie du formulaire Hajj Smart.
-- Prendre en charge la connexion sans mot de passe et l'authentification à deux
-	facteurs.
-- Réduire les étapes répétitives liées aux captchas lorsque le système connecté
-	le permet.
+Eagle aide votre équipe à passer moins de temps à ressaisir des informations et
+plus de temps à vérifier les éléments importants. Votre équipe reste responsable
+de la vérification des données des voyageurs et du respect des exigences du service
+de destination.
 
 ### Installation
 
-Avant d'installer Eagle, installez les dernières versions de **Node.js** et de
-**Git**.
+Vous aurez besoin de **Node.js LTS** et de **Git** :
 
-1. Téléchargez Node.js depuis [nodejs.org](https://nodejs.org/) et choisissez la
-	 dernière version LTS. Après l'installation, ouvrez Terminal sur macOS/Linux
-	 ou PowerShell sur Windows et vérifiez l'installation :
+1. Installez Node.js depuis [nodejs.org](https://nodejs.org/).
+2. Installez Git depuis [git-scm.com/downloads](https://git-scm.com/downloads).
+3. Ouvrez Terminal sur macOS/Linux ou PowerShell sur Windows, puis exécutez :
 
-	 ```bash
-	 node --version
-	 npm --version
-	 ```
+   ```bash
+   git clone https://github.com/hajonsoft/eagle.git
+   cd eagle
+   npm install
+   ```
 
-2. Téléchargez Git depuis [git-scm.com/downloads](https://git-scm.com/downloads)
-	 et suivez l'installateur. Vérifiez ensuite l'installation :
+### Vérifier l'installation
 
-	 ```bash
-	 git --version
-	 ```
-
-3. Clonez Eagle depuis GitHub, ouvrez son dossier et installez ses dépendances :
-
-	 ```bash
-	 git clone https://github.com/hajonsoft/eagle.git
-	 cd eagle
-	 npm i
-	 ```
-
-### Mettre Eagle à jour
-
-Lorsqu'une nouvelle version est disponible, ouvrez Terminal ou PowerShell dans
-le dossier Eagle et exécutez :
+Vérifiez que les outils sont disponibles, puis affichez la version d'Eagle :
 
 ```bash
-git pull origin main
+node --version
+npm --version
+git --version
+node . -v
 ```
 
-Pour rendre votre copie locale exactement identique à la dernière version de la
-branche `main`, exécutez :
+La vérification de version confirme l'installation locale. Un vrai traitement
+nécessite également les données des voyageurs, l'accès au compte et les
+instructions fournis par votre organisation. Ne lancez pas de soumission réelle
+tant que ces éléments ne sont pas prêts.
+
+### Aide du navigateur
+
+Au démarrage, Eagle affiche le chemin de l'exécutable Chrome attendu. Si Chrome
+est absent, la console indique la version à télécharger et les commandes
+d'installation adaptées à votre ordinateur. Suivez exactement ces commandes :
+la version et le dossier de destination correspondent au paquet Puppeteer installé.
+
+Si la console indique que Chrome a été fermé ou que la page a changé, rouvrez
+Chrome si nécessaire, attendez que la page soit stable, puis réessayez. Redémarrez
+Eagle si le problème persiste. Pour l'aide liée à votre organisation, contactez
+votre responsable d'équipe ou votre interlocuteur Hajonsoft.
+
+## العربية
+
+### سير عمل أوضح لفريقك
+
+يساعد حج اونسوفث الفرق على تجهيز معلومات المسافرين وإكمال إجراءات التأشيرة
+المدعومة بخطوات متكررة أقل. يجمع تفاصيل جواز السفر ومهام الطلب في سير عمل موجّه
+على جهازك، مع نافذة متصفح يمكنك متابعة العمل من خلالها.
+
+يساعد Eagle فريقك على تقليل وقت إعادة إدخال المعلومات والتركيز أكثر على مراجعة
+التفاصيل المهمة. يبقى فريقك مسؤولاً عن التحقق من بيانات المسافرين واتباع متطلبات
+الخدمة المقصودة.
+
+### البدء
+
+ستحتاج إلى **Node.js LTS** و **Git**:
+
+1. ثبّت Node.js من [nodejs.org](https://nodejs.org/).
+2. ثبّت Git من [git-scm.com/downloads](https://git-scm.com/downloads).
+3. افتح Terminal على macOS/Linux أو PowerShell على Windows، ثم نفّذ:
+
+   ```bash
+   git clone https://github.com/hajonsoft/eagle.git
+   cd eagle
+   npm install
+   ```
+
+### التحقق من الإعداد
+
+تحقق من توفر الأدوات، ثم اعرض إصدار Eagle المثبّت:
 
 ```bash
-git fetch origin
-git reset --hard origin/main
+node --version
+npm --version
+git --version
+node . -v
 ```
 
-La commande reset supprime les modifications locales des fichiers suivis. Après
-la mise à jour, installez les dépendances éventuellement modifiées :
+يؤكد فحص الإصدار نجاح التثبيت المحلي. يتطلب التشغيل الفعلي أيضاً بيانات
+المسافرين وصلاحية الحساب وتعليمات التشغيل التي توفرها مؤسستك. لا تبدأ إرسالاً
+فعلياً قبل تجهيز هذه المتطلبات.
+
+### مساعدة المتصفح
+
+يعرض Eagle عند التشغيل مسار ملف Chrome التنفيذي الذي يتوقع استخدامه. إذا لم يكن
+Chrome مثبتاً، تعرض وحدة التحكم إصدار التنزيل وأوامر التثبيت المناسبة لجهازك.
+اتبع الأوامر كما هي؛ إذ يتطابق الإصدار ومجلد الوجهة مع إصدار Puppeteer المثبّت.
+
+إذا ظهرت رسالة تفيد بإغلاق Chrome أو تغيّر الصفحة، فأعد فتح Chrome عند الحاجة،
+وانتظر استقرار الصفحة ثم أعد المحاولة. أعد تشغيل Eagle إذا استمرت المشكلة.
+للمساعدة في إعداد مؤسستك، تواصل مع مسؤول فريقك أو ممثل حج اونسوفث.
+
+## हिन्दी
+
+### आपकी टीम के लिए आसान कार्यप्रवाह
+
+Hajonsoft Eagle टीमों को यात्रियों की जानकारी तैयार करने और समर्थित वीज़ा
+प्रक्रियाएँ कम दोहराव वाले चरणों में पूरी करने में मदद करता है। पासपोर्ट का
+विवरण और आवेदन के काम आपके कंप्यूटर पर एक निर्देशित कार्यप्रवाह में आते हैं,
+जिसे आप ब्राउज़र विंडो में देख सकते हैं।
+
+Eagle का उद्देश्य जानकारी बार-बार दर्ज करने में लगने वाला समय घटाना और ज़रूरी
+विवरणों की जाँच पर ध्यान देना है। यात्री की जानकारी जाँचना और संबंधित सेवा की
+आवश्यकताओं का पालन करना आपकी टीम की ज़िम्मेदारी है।
+
+### शुरुआत करें
+
+आपको **Node.js LTS** और **Git** की आवश्यकता होगी:
+
+1. [nodejs.org](https://nodejs.org/) से Node.js इंस्टॉल करें।
+2. [git-scm.com/downloads](https://git-scm.com/downloads) से Git इंस्टॉल करें।
+3. macOS/Linux पर Terminal या Windows पर PowerShell खोलें और चलाएँ:
+
+   ```bash
+   git clone https://github.com/hajonsoft/eagle.git
+   cd eagle
+   npm install
+   ```
+
+### इंस्टॉलेशन जाँचें
+
+पुष्टि करें कि टूल उपलब्ध हैं, फिर Eagle का इंस्टॉल किया हुआ संस्करण देखें:
 
 ```bash
-npm i
+node --version
+npm --version
+git --version
+node . -v
 ```
+
+यह संस्करण-जाँच केवल स्थानीय इंस्टॉलेशन की पुष्टि करती है। वास्तविक प्रक्रिया
+के लिए आपकी संस्था से मिला यात्री डेटा, खाता-अनुमति और रन करने के निर्देश भी
+चाहिए। ये तैयार होने से पहले कोई वास्तविक सबमिशन शुरू न करें।
+
+### ब्राउज़र सहायता
+
+शुरू होते समय Eagle अपेक्षित Chrome executable का path दिखाता है। Chrome न मिलने
+पर console आपके कंप्यूटर के लिए सही डाउनलोड संस्करण और इंस्टॉलेशन कमांड दिखाता
+है। उन्हीं कमांड का उपयोग करें; संस्करण और destination इंस्टॉल किए गए Puppeteer
+पैकेज के अनुसार बनाए जाते हैं।
+
+यदि संदेश आए कि Chrome बंद हो गया है या पेज बदल गया है, तो ज़रूरत पड़ने पर Chrome
+फिर खोलें, पेज स्थिर होने दें और दोबारा प्रयास करें। समस्या बनी रहे तो Eagle को
+फिर से शुरू करें। संस्था की सेटअप सहायता के लिए अपनी टीम के प्रमुख या Hajonsoft
+प्रतिनिधि से संपर्क करें।
