@@ -17,6 +17,10 @@ const {
   withBusyCursor,
   withCriticalCursor,
 } = require("./lib/cursor-manager");
+const {
+  installTroubleshootingNavigation,
+  openTroubleshooting,
+} = require("./lib/troubleshooting-ui");
 
 const sharp = require("sharp");
 const budgie = require("./budgie");
@@ -1171,6 +1175,10 @@ async function controller(page, structure, travellers) {
         isEnglishOnly() ? "Continuous" : "Continuous مستمر",
       ],
     );
+    await ensureExposedFunction(page, "openEagleTroubleshooting", () =>
+      openTroubleshooting(page),
+    );
+    await installTroubleshootingNavigation(page);
   } catch (err) {
     // console.log(err);
   }
@@ -1322,6 +1330,10 @@ async function commander(page, structure, travellers) {
     if (!isCloseBrowserExposed) {
       await page.exposeFunction("closeBrowser", closeBrowser);
     }
+    await ensureExposedFunction(page, "openEagleTroubleshooting", () =>
+      openTroubleshooting(page),
+    );
+    await installTroubleshootingNavigation(page);
   } catch (err) {
     console.log(err);
   }

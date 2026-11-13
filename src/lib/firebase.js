@@ -55,10 +55,11 @@ const logInWithRefreshToken = async (refreshToken, apiKey) => {
       `✅ [AUTH] Signed in securely as ${userCredential.user.email} | تم تسجيل الدخول بأمان`,
     );
     return userCredential.user;
-  } catch (e) {
-    console.error(`Error: ${e.message}`);
+  } catch {
+    const error = new Error("Access token could not be validated.");
+    error.code = "EAGLE_INVALID_TOKEN";
+    throw error;
   }
-  return null;
 };
 
 module.exports = {

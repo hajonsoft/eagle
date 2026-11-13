@@ -1,0 +1,178 @@
+<dialog id="eagle-troubleshooting-dialog" aria-labelledby="eagle-troubleshooting-title">
+  <style>
+    #eagle-troubleshooting-dialog {
+      width: min(760px, calc(100vw - 32px));
+      max-width: 760px;
+      max-height: 88vh;
+      padding: 0;
+      border: 1px solid #cbd5cc;
+      border-radius: 12px;
+      color: #17231a;
+      background: #fff;
+      box-shadow: 0 18px 56px rgba(13, 35, 18, .28);
+      font: 16px/1.55 Arial, sans-serif;
+    }
+    #eagle-troubleshooting-dialog::backdrop {
+      background: rgba(15, 25, 17, .58);
+    }
+    #eagle-troubleshooting-dialog .troubleshooting-content {
+      max-height: 88vh;
+      overflow: auto;
+      padding: 24px clamp(18px, 4vw, 36px) 32px;
+    }
+    #eagle-troubleshooting-dialog .troubleshooting-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      border-bottom: 1px solid #dfe7df;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+    }
+    #eagle-troubleshooting-dialog h2,
+    #eagle-troubleshooting-dialog h3 {
+      color: #1b5e20;
+      line-height: 1.25;
+    }
+    #eagle-troubleshooting-dialog h2 {
+      margin: 0;
+      font-size: 1.5rem;
+    }
+    #eagle-troubleshooting-dialog h3 {
+      margin: 24px 0 8px;
+      font-size: 1.1rem;
+    }
+    #eagle-troubleshooting-dialog p,
+    #eagle-troubleshooting-dialog ol {
+      margin: 8px 0 12px;
+    }
+    #eagle-troubleshooting-dialog .troubleshooting-note {
+      border-left: 4px solid #558b5e;
+      background: #f0f7f0;
+      padding: 12px 14px;
+    }
+    #eagle-troubleshooting-dialog .command-row {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+      margin: 8px 0 16px;
+    }
+    #eagle-troubleshooting-dialog pre {
+      flex: 1;
+      min-width: 0;
+      overflow: auto;
+      margin: 0;
+      padding: 12px;
+      border: 1px solid #d7dfd8;
+      border-radius: 6px;
+      background: #f5f7f5;
+      color: #142016;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+    #eagle-troubleshooting-dialog code {
+      font: 14px/1.5 ui-monospace, SFMono-Regular, Consolas, monospace;
+      user-select: all;
+    }
+    #eagle-troubleshooting-dialog button {
+      min-height: 40px;
+      border: 1px solid #2e6737;
+      border-radius: 6px;
+      padding: 8px 12px;
+      color: #fff;
+      background: #2e6737;
+      font: 600 14px Arial, sans-serif;
+      cursor: pointer;
+    }
+    #eagle-troubleshooting-dialog button:hover {
+      background: #1b5e20;
+    }
+    #eagle-troubleshooting-dialog .close-form {
+      flex: 0 0 auto;
+    }
+    @media (max-width: 520px) {
+      #eagle-troubleshooting-dialog .command-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+      #eagle-troubleshooting-dialog .command-row button {
+        align-self: flex-end;
+      }
+    }
+  </style>
+  <article class="troubleshooting-content">
+    <header class="troubleshooting-header">
+      <h2 id="eagle-troubleshooting-title">Troubleshooting</h2>
+      <form method="dialog" class="close-form">
+        <button type="submit" aria-label="Close troubleshooting">Close</button>
+      </form>
+    </header>
+
+    <section aria-labelledby="chrome-manual-install-title">
+      <h2 id="chrome-manual-install-title">Installing Chrome for Testing Manually (Windows)</h2>
+      <p>Some users may have trouble downloading the Chrome browser required by Puppeteer, particularly in countries or on networks where Google's download servers cannot be reached. These steps download Chrome independently of Puppeteer and npm.</p>
+
+      <div class="troubleshooting-note">
+        <strong>Use the exact Chrome version required by your Hajonsoft release.</strong>
+        The example below is version 131.0.6778.87. Do not replace it with the latest Chrome version unless it is the version required by your release.
+      </div>
+
+      <h3>Step 1: Open Command Prompt</h3>
+      <ol>
+        <li>Go to the Windows Desktop.</li>
+        <li>Press <kbd>Windows + R</kbd>.</li>
+        <li>Type <code>cmd</code> and press Enter.</li>
+      </ol>
+
+      <h3>Step 2: Navigate to the Desktop</h3>
+      <p>Enter this command and press Enter:</p>
+      <div class="command-row">
+        <pre><code>cd /d "%USERPROFILE%\Desktop"</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+
+      <h3>Step 3: Download Chrome for Testing</h3>
+      <p>Download the exact Chrome version required by this Hajonsoft release:</p>
+      <div class="command-row">
+        <pre><code>curl -L -o chrome-win64.zip https://storage.googleapis.com/chrome-for-testing-public/131.0.6778.87/win64/chrome-win64.zip</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+      <p>Wait for the download to finish before continuing.</p>
+
+      <h3>Step 4: Extract the downloaded ZIP file</h3>
+      <p>Run this command to extract the archive into a folder on your Desktop:</p>
+      <div class="command-row">
+        <pre><code>powershell -Command "Expand-Archive -Path '.\chrome-win64.zip' -DestinationPath '.\chrome-win64' -Force"</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+
+      <h3>Step 5: Verify the Chrome executable</h3>
+      <p>Check that the extracted Chrome executable exists:</p>
+      <div class="command-row">
+        <pre><code>dir ".\chrome-win64\chrome-win64\chrome.exe"</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+      <p>The expected executable location is:</p>
+      <div class="command-row">
+        <pre><code>%USERPROFILE%\Desktop\chrome-win64\chrome-win64\chrome.exe</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+
+      <h3>Step 6: Verify the Chrome version</h3>
+      <p>Run Chrome with the version option:</p>
+      <div class="command-row">
+        <pre><code>".\chrome-win64\chrome-win64\chrome.exe" --version</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+      <p>Expected output:</p>
+      <div class="command-row">
+        <pre><code>Google Chrome 131.0.6778.87</code></pre>
+        <button type="button" data-copy-command>Copy</button>
+      </div>
+
+      <div class="troubleshooting-note">
+        After extraction, provide the executable path to Hajonsoft/Puppeteer if automatic browser detection does not find it. Keep the path and version matched to the current Hajonsoft release.
+      </div>
+    </section>
+  </article>
+</dialog>
