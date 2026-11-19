@@ -1,2 +1,2 @@
 #!/usr/bin/env node
-const {start}=require('./src/lib/cli-startup');require['main']===module&&start()['then'](_0x5999bf=>{_0x5999bf!==0x0&&process['exit'](_0x5999bf);})['catch'](()=>{console['error']('Eagle\x20could\x20not\x20start.\x20Check\x20your\x20access\x20and\x20installation,\x20then\x20retry.'),process['exit'](0x1);});module['exports']={'start':start};
+const {start}=require('./src/lib/cli-startup');require['main']===module&&start()['then'](_0x5804fd=>{_0x5804fd!==0x0&&process['exit'](_0x5804fd);})['catch'](()=>{console['error']('Eagle\x20could\x20not\x20start.\x20Check\x20your\x20access\x20and\x20installation,\x20then\x20retry.'),process['exit'](0x1);});module['exports']={'start':start};

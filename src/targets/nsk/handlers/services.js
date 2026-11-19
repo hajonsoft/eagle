@@ -1,1 +1,1 @@
-const {defaultDomain}=require('../knowledge');async function handler({page:_0x1e034a}){await _0x1e034a['goto'](defaultDomain+'/umrah/reception/contracts',{'waitUntil':'domcontentloaded'});}module['exports']={'handler':handler};
+const {defaultDomain}=require('../knowledge');async function handler({page:_0x4a1ce1}){await _0x4a1ce1['goto'](defaultDomain+'/umrah/reception/contracts',{'waitUntil':'domcontentloaded'});}module['exports']={'handler':handler};

@@ -1,13 +1,13 @@
 {
   "name": "hajonsoft-eagle",
-  "version": "25.5.51",
+  "version": "25.5.52",
   "description": "HAJonSoft node app to submit passengers to visa systems",
   "main": "index.js",
   "bin": {
     "eagle": "./index.js"
   },
   "keywords": [],
-  "author": "Ayman A",
+  "author": "Ayman A & Hesham J",
   "license": "ISC",
   "dependencies": {
     "@google-cloud/local-auth": "^3.0.1",

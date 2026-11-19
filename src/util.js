@@ -17,11 +17,6 @@ const {
   withBusyCursor,
   withCriticalCursor,
 } = require("./lib/cursor-manager");
-const {
-  installTroubleshootingNavigation,
-  openTroubleshooting,
-} = require("./lib/troubleshooting-ui");
-
 const sharp = require("sharp");
 const budgie = require("./budgie");
 const axios = require("axios");
@@ -147,25 +142,24 @@ function getChromeInstallInstructions(executablePath) {
       path.sep.length,
   );
   const downloadUrl = `https://storage.googleapis.com/chrome-for-testing-public/${version}/${archivePlatform}/${archiveFolder}.zip`;
-  const destinationPath = path.join(versionDirectoryPath, archiveFolder);
 
   if (os.platform() === "win32") {
-    return [
-      `curl.exe -L -o ${archiveFolder}.zip ${downloadUrl}`,
-      `tar -xf ${archiveFolder}.zip`,
-      `New-Item -ItemType Directory -Force -Path "${versionDirectoryPath}"`,
-      `Copy-Item -Path ".\\${archiveFolder}" -Destination "${versionDirectoryPath}" -Recurse -Force`,
-      `Expected Chrome folder: ${destinationPath}`,
-    ].join("\n");
+    const powershellDestination = versionDirectoryPath.replace(/'/g, "''");
+    return `curl -L -o ${archiveFolder}.zip ${downloadUrl} && tar -xf ${archiveFolder}.zip && powershell -NoProfile -Command "$ErrorActionPreference='Stop'; New-Item -ItemType Directory -Force -Path '${powershellDestination}' | Out-Null; Copy-Item -Path '.\\${archiveFolder}' -Destination '${powershellDestination}' -Recurse -Force"`;
   }
 
-  return [
-    `curl -L -o ${archiveFolder}.zip ${downloadUrl}`,
-    `tar -xf ${archiveFolder}.zip`,
-    `mkdir -p "${versionDirectoryPath}"`,
-    `cp -R "${archiveFolder}" "${versionDirectoryPath}"`,
-    `Expected Chrome folder: ${destinationPath}`,
-  ].join("\n");
+  return `curl -L -o ${archiveFolder}.zip ${downloadUrl} && unzip -o ${archiveFolder}.zip && mkdir -p "${versionDirectoryPath}" && cp -R "${archiveFolder}" "${versionDirectoryPath}"`;
+}
+
+function logChromeInstallInstructions(executablePath) {
+  const terminal =
+    os.platform() === "win32"
+      ? "Windows Command Prompt"
+      : os.platform() === "darwin"
+        ? "macOS Terminal"
+        : "your terminal";
+  console.log(`Run this single command in ${terminal}:`);
+  console.log(getChromeInstallInstructions(executablePath));
 }
 
 function getIssuingCountry(passenger) {
@@ -401,17 +395,29 @@ async function initPage(config, onContentLoaded, data) {
 
   const chromeExecutablePath =
     launchOptions.executablePath || puppeteer.executablePath();
-  if (fs.existsSync(chromeExecutablePath)) {
+  const chromeExecutableExists = fs.existsSync(chromeExecutablePath);
+  if (chromeExecutableExists) {
     console.log(`✅ Chrome executable found: ${chromeExecutablePath}`);
   } else {
     console.log(`❌ Chrome executable missing: ${chromeExecutablePath}`);
-    console.log("Install the matching Chrome build with these commands:");
-    console.log(getChromeInstallInstructions(chromeExecutablePath));
+    logChromeInstallInstructions(chromeExecutablePath);
   }
 
   try {
     browser = await puppeteer.launch(launchOptions);
   } catch (error) {
+    const chromeMissing =
+      /could not find (?:chrome|chromium)|(?:chrome|chromium).*(?:not found|does not exist|missing)|executable.*(?:not found|does not exist|missing)/i.test(
+        error?.message || String(error),
+      );
+    if (chromeMissing) {
+      if (chromeExecutableExists) {
+        console.log("Puppeteer could not find a usable Chrome executable.");
+        logChromeInstallInstructions(chromeExecutablePath);
+      }
+      throw error;
+    }
+
     if (shouldUseHeadless) {
       console.log(
         "Headless=new launch failed, retrying with legacy headless:",
@@ -1175,10 +1181,6 @@ async function controller(page, structure, travellers) {
         isEnglishOnly() ? "Continuous" : "Continuous مستمر",
       ],
     );
-    await ensureExposedFunction(page, "openEagleTroubleshooting", () =>
-      openTroubleshooting(page),
-    );
-    await installTroubleshootingNavigation(page);
   } catch (err) {
     // console.log(err);
   }
@@ -1330,10 +1332,6 @@ async function commander(page, structure, travellers) {
     if (!isCloseBrowserExposed) {
       await page.exposeFunction("closeBrowser", closeBrowser);
     }
-    await ensureExposedFunction(page, "openEagleTroubleshooting", () =>
-      openTroubleshooting(page),
-    );
-    await installTroubleshootingNavigation(page);
   } catch (err) {
     console.log(err);
   }

@@ -1,1 +1,1 @@
-async function handler({currentPage:_0x556d89}){await _0x556d89['goto']('https://services.ksavisa.sa/SmartForm');}module['exports']={'handler':handler};
+async function handler({currentPage:_0x160498}){await _0x160498['goto']('https://services.ksavisa.sa/SmartForm');}module['exports']={'handler':handler};

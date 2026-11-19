@@ -1,1 +1,1 @@
-function isEnglishOnly(){return process['argv']['some'](_0x1bd855=>_0x1bd855['toLowerCase']()==='--lang=en');}module['exports']={'isEnglishOnly':isEnglishOnly};
+function isEnglishOnly(){return process['argv']['some'](_0x457a1f=>_0x457a1f['toLowerCase']()==='--lang=en');}module['exports']={'isEnglishOnly':isEnglishOnly};

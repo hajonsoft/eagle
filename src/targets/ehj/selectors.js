@@ -136,11 +136,12 @@ const SELECTORS = {
     referenceXPath:
       '//*[@id="content"]/div/app-applicant-add/app-add-basic-data/form/div[2]/app-main-card/div/div[2]/div/div[2]/g-dropdown',
     confirmPhotoButton:
-      "#content > div > app-applicant-add > app-add-basic-data > app-photo-validation > p-dialog > div > div > div:nth-child(3) > button",
+      "#content > div > app-applicant-add > app-add-basic-data > app-photo-validation > p-dialog .p-dialog-footer > button",
     nextButton:
       "#content > div > app-applicant-add > app-add-basic-data > form > action-btns > div > div > button",
   },
   additionalData: {
+    aiAssistant: "body > app-root > app-ai-chatbot > div",
     notEmployed:
       "#content > div > app-applicant-add > app-additional-data > form > div:nth-child(1) > div > app-main-card > div > div.body.collapse.show > div > div.col-md-6.mt-3 > div > div:nth-child(1) > div > p-radiobutton > div > div.p-radiobutton-box",
     expectedLength:
